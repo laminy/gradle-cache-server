@@ -63,3 +63,29 @@ Or from `gradle.properties` file
 ```properties
 org.gradle.caching=true
 ```
+
+## Monitoring
+Prometheus metrics available at `/metrics` endpoint on the same port.
+Metrics
+
+| name | type | comment |
+|---|---|---|
+| cache_get | counter | Total number of requested items |
+| cache_put | counter | Total number of saved items |
+
+#### Metrics attributes (labels)
+
+| name | comment |
+|---|---|
+| code | http status code (200 or 404) |
+| path0 | part#0 of url  |
+| path1 | part#1 of url |
+
+#### Part examples
+
+| Request URL | path0 | path1 |
+|---|---|---|
+| /9af937214740e6369e0d9c47dbea521d| empty string | empty string |
+| /service/9af937214740e6369e0d9c47dbea521d| service | empty string |
+| /team/service/9af937214740e6369e0d9c47dbea521d| team | service |
+| /space/team/service/9af937214740e6369e0d9c47dbea521d| space | team |

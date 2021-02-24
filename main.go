@@ -6,6 +6,7 @@ import (
 	"github.com/laminy/gradle-cache-server/config"
 	"github.com/laminy/gradle-cache-server/handlers"
 	"github.com/laminy/gradle-cache-server/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 )
 
@@ -17,10 +18,13 @@ func main() {
 	}
 	listenAddr := fmt.Sprintf(":%d", config.ServerConfig.Port)
 	router := mux.NewRouter()
+	metricsRouter := router.PathPrefix("/metrics").Subrouter()
+	metricsRouter.Methods("GET").Handler(promhttp.Handler())
 	subRouter := router.PathPrefix("").Subrouter()
 	subRouter.Methods("PUT").HandlerFunc(handlers.CachePut)
 	subRouter.Methods("GET").Handler(http.FileServer(http.Dir(config.ServerConfig.Path)))
-	router.Use(middleware.Logging)
+	subRouter.Use(middleware.Logging)
+	subRouter.Use(middleware.Metrics)
 	fmt.Printf("Server started at [:%d] with cache at %s\n", config.ServerConfig.Port, config.ServerConfig.Path)
 	err = http.ListenAndServe(listenAddr, router)
 	if err != nil {
