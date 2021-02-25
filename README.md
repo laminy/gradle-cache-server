@@ -22,7 +22,9 @@ Server settings stored in file `config.json`
 ```json
 {
   "path": "/opt/data/cache",
-  "port": 32555
+  "port": 32555,
+  "scan": "1h",
+  "alive": "7d"
 }
 ```
 Where
@@ -31,6 +33,19 @@ Where
 |---|---|---|
 | path | string | cache directory |
 | port | int | server port |
+| scan | string | cache clear: scan interval |
+| alive | string | cache clear: max time old file alive before delete |
+
+#### Scan and alive formats
+Format is `{number}{literal}`, where
+
+| literal | comment |
+|---|---|
+| s | second |
+| m | minute |
+| h | hour |
+| d | day |
+| w | week |
 
 ## Start server
 ```shell script
@@ -72,6 +87,7 @@ Metrics
 |---|---|---|
 | cache_get | counter | Total number of requested items |
 | cache_put | counter | Total number of saved items |
+| cache_del | counter | Total number of deleted items |
 
 #### Metrics attributes (labels)
 

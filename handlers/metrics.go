@@ -16,6 +16,10 @@ var (
 		Name: "cache_get",
 		Help: "Total number of requested items",
 	}, []string{"path0", "path1", "code"})
+	delMetrics = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "cache_del",
+		Help: "Total number of deleted items",
+	}, []string{"path0", "path1", "code"})
 )
 
 func IncCounter(path string, code int, method string) {
@@ -26,6 +30,9 @@ func IncCounter(path string, code int, method string) {
 		break
 	case "PUT":
 		counter = putMetrics
+		break
+	case "DELETE":
+		counter = delMetrics
 		break
 	default:
 		return

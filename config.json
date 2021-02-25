@@ -1,4 +1,6 @@
 {
   "path": "/opt/data/cache",
-  "port": 32555
+  "port": 32555,
+  "scan": "1h",
+  "alive": "7d"
 }
